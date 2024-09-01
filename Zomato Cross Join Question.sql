@@ -1,0 +1,34 @@
+DROP TABLE IF EXISTS orders;
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    item VARCHAR(255) NOT NULL
+);
+
+INSERT INTO orders (order_id, item) VALUES
+(1, 'Chow Mein'),
+(2, 'Pizza'),
+(3, 'Veg Nuggets'),
+(4, 'Paneer Butter Masala'),
+(5, 'Spring Rolls'),
+(6, 'Veg Burger'),
+(7, 'Paneer Tikka');
+
+WITH NEW_ORDERS AS
+(
+SELECT
+	   COUNT(*) AS TOTAL_ORDERS 
+FROM ORDERS
+)
+SELECT 
+	ORDER_ID AS INCORRECT_ORDER_ID,
+    CASE
+    WHEN ORDER_ID %2 <>0 AND ORDER_ID <> TOTAL_ORDERS THEN ORDER_ID + 1
+    WHEN ORDER_ID %2 <>0 AND ORDER_ID = TOTAL_ORDERS THEN ORDER_ID 
+    ELSE ORDER_ID-1
+    END AS CORRECT_ORDER_ID,
+    ITEM
+FROM NEW_ORDERS
+CROSS JOIN
+ORDERS
+ORDER BY 2
